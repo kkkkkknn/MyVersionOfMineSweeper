@@ -24,12 +24,15 @@ def terminate():
     sys.exit()
 
 def start_screen():
-    intro_text = ["ЗАСТАВКА", "",
-                  "Правила игры",
-                  "Если в правилах несколько строк,",
-                  "приходится выводить их построчно"]
+    intro_text = ["Это пародия  на классическую игру 'сапёр.'",
+                  "Всего у игрока 100 единиц здоровья.",
+                  "Есть мины 3 уровней:",
+                  "1 уровень -'Лепесток' наносит 25 урона",
+                  "2 уровень - 'Осколочная' наносит 50 урона",
+                  "3 уровень - 'Фугасная' наносит 100 урона",
+                  "Цель дойти до конца поля, пока вы живы."]
 
-    fon = pygame.transform.scale(load_image('fon.jpg'), (1600, 800))
+    fon = pygame.transform.scale(load_image('fon.png'), (1280, 720))
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 30)
     text_coord = 50
@@ -54,15 +57,15 @@ def start_screen():
 
 
 pygame.init()
-screen_size = (1600, 800)
+screen_size = (1280, 720)
 screen = pygame.display.set_mode(screen_size)
 FPS = 50
 
 tile_images = {
-    'wall': load_image('box.png'),
+    # 'wall': load_image('box.png'),
     'empty': load_image('grass.png')
 }
-player_image = load_image('mar.png')
+player_image = load_image('solder.png')
 tile_width = tile_height = 50
 
 
@@ -139,7 +142,7 @@ running  = True
 clock = pygame.time.Clock()
 
 # start_screen()
-level_map = load_level("map.txt")
+level_map = load_level("field.txt")
 hero, max_x, max_y = generate_level(level_map)
 while True:
     for event in pygame.event.get():
