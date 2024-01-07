@@ -1,42 +1,30 @@
 import pygame
-
-# from pygame.locals import *
-from constants import *
+import constants
 
 
-class Player:
-    def __init__(self, game_map, end_screen, screen):
-        self.image = pygame.image.load('data/solder.png')
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load('data/soldier.png').convert_alpha()
         self.rect = self.image.get_rect()
-        self.rect.x = (SCREEN_WIDTH - self.rect.width) // 2
-        self.rect.y = (SCREEN_HEIGHT - self.rect.height) // 2
-        self.health = 100
-        self.visible = False
-        self.game_map = game_map
-        self.end_screen = end_screen
-        self.screen = screen
+        self.rect.center = (constants.GAME_WIDTH // 2, constants.GAME_HEIGHT // 2)
+        self.velocity = constants.CELL_SIZE
 
-    def move(self, dx, dy):
-        self.rect.x += dx * TILE_SIZE
-        self.rect.y += dy * TILE_SIZE
+    def update(self, keys):
+        dx = dy = 0
+        if keys[pygame.K_w]:
+            dy -= self.velocity
+        elif keys[pygame.K_s]:
+            dy += self.velocity
+        elif keys[pygame.K_a]:
+            dx -= self.velocity
+        elif keys[pygame.K_d]:
+            dx += self.velocity
 
-    def update(self):
-        if self.rect.left < self.game_map.rect.x:
-            self.rect.left = self.game_map.rect.x
-        elif self.rect.right > self.game_map.rect.x + self.game_map.rect.width * TILE_COUNT:
-            self.rect.right = self.game_map.rect.x + self.game_map.rect.width * TILE_COUNT
-        if self.rect.top < self.game_map.rect.y:
-            self.rect.top = self.game_map.rect.y
-        elif self.rect.bottom > self.game_map.rect.y + self.game_map.rect.height * TILE_COUNT:
-            self.rect.bottom = self.game_map.rect.y + self.game_map.rect.height * TILE_COUNT
+        new_x = self.rect.x + dx
+        new_y = self.rect.y + dy
 
-    def hit(self):
-        self.health -= 10
-        if self.health <= 0:
-            self.health = 0
-            self.visible = False
-            self.end_screen.display(self.screen)
-
-    def render(self, screen):
-        if self.visible:
-            screen.blit(self.image, self.rect)
+        if 0 <= new_x < constants.GAME_WIDTH - self.rect.width:
+            self.rect.x = new_x
+        if 0 <= new_y < constants.GAME_HEIGHT - self.rect.height:
+            self.rect.y = new_y

@@ -1,31 +1,26 @@
-import sys
-
 import pygame
-from pygame.locals import *
+import constants
 
+def display_menu():
+    pygame.init()
+    screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
+    background = pygame.image.load('data/fon.png').convert()
 
-class Menu:
-    def __init__(self):
-        self.background_image = pygame.image.load('data/fon.png')
-        self.text = 'Rules: Move the character using W, A, S, D keys'
+    rules_text = "Напишите правила вашей игры здесь"
+    rules_font = pygame.font.Font(None, 30)
+    text = rules_font.render(rules_text, True, (0, 0, 0))
+    text_rect = text.get_rect(center=(constants.SCREEN_WIDTH // 2, constants.SCREEN_HEIGHT // 2))
 
-    def display(self, screen):
-        clock = pygame.time.Clock()
-        font = pygame.font.Font(None, 36)
-        text_render = font.render(self.text, True, (255, 255, 255))
-        text_rect = text_render.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
 
-        running = True
-        while running:
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    pygame.quit()
-                    sys.exit()
-                elif event.type == KEYDOWN:
-                    if event.key == K_RETURN:
-                        running = False
+                return
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    return
 
-            screen.blit(self.background_image, (0, 0))
-            screen.blit(text_render, text_rect)
-            pygame.display.flip()
-            clock.tick(30)
+        screen.blit(background, (0, 0))
+        screen.blit(text, text_rect)
+        pygame.display.update()

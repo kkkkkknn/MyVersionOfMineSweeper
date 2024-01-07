@@ -1,18 +1,19 @@
 import pygame
-
-# from pygame.locals import *
-from constants import *
+import constants
 
 
-class HealthBar:
-    def __init__(self):
-        self.rect = pygame.Rect(SCREEN_WIDTH - 220, SCREEN_HEIGHT - 50, 200, 20)
-        self.health = 100
+class HealthBar(pygame.sprite.Sprite):
+    def __init__(self, player):
+        super().__init__()
+        self.player = player
+        self.image = pygame.Surface((100, 20))
+        self.image.fill((255, 0, 0))
+        self.rect = self.image.get_rect()
+        self.rect.bottomright = (constants.SCREEN_WIDTH - 10, constants.SCREEN_HEIGHT - 10)
 
-    def update(self, health):
-        self.health = health
+    def update(self):
+        health_percentage = self.player.health / self.player.max_health
+        health_width = int(health_percentage * self.image.get_width())
 
-    def render(self, screen):
-        pygame.draw.rect(screen, (255, 0, 0), self.rect)
-        inner_rect = pygame.Rect(self.rect.x, self.rect.y, self.health * 2, self.rect.height)
-        pygame.draw.rect(screen, (255, 0, 0), inner_rect)
+        self.image.fill((255, 0, 0))
+        pygame.draw.rect(self.image, (0, 255, 0), (0, 0, health_width, self.image.get_height()))

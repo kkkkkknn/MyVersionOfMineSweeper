@@ -1,18 +1,19 @@
 import pygame
-# from pygame.locals import *
-from constants import *
+import constants
 
 
-class GameMap:
-    def __init__(self, player):
-        self.image = pygame.image.load('data/grass.png')
+class GameMap(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface((constants.GAME_WIDTH, constants.GAME_HEIGHT))
+        self.image.fill(constants.BACKGROUND_COLOR)
+
+        grass_image = pygame.image.load('data/grass.png').convert_alpha()
+        grass_image = pygame.transform.scale(grass_image, (constants.CELL_SIZE, constants.CELL_SIZE))
+
+        for x in range(0, constants.GAME_WIDTH, constants.CELL_SIZE):
+            for y in range(0, constants.GAME_HEIGHT, constants.CELL_SIZE):
+                self.image.blit(grass_image, (x, y))
+
         self.rect = self.image.get_rect()
-        self.rect.x = (SCREEN_WIDTH - self.rect.width * TILE_COUNT) // 2
-        self.rect.y = (SCREEN_HEIGHT - self.rect.height * TILE_COUNT) // 2
-        self.player = player
-
-    def render(self, screen):
-        for x in range(self.rect.x, self.rect.x + self.rect.width * TILE_COUNT, self.rect.width):
-            for y in range(self.rect.y, self.rect.y + self.rect.height * TILE_COUNT, self.rect.height):
-                screen.blit(self.image, (x, y))
-        self.player.render(screen)
+        self.rect.center = (constants.SCREEN_WIDTH // 2, constants.SCREEN_HEIGHT // 2)
