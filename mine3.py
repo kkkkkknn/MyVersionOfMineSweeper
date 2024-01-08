@@ -1,10 +1,10 @@
-import pygame
+class Mine3:
+    def __init__(self):
+        self.damage = 40
+        self.image_path = "data/mine3.png"
 
+    def get_damage(self):
+        return self.damage
 
-class Mine3(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        super().__init__()
-        self.image = pygame.image.load('data/mine3.png').convert_alpha()
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+    def get_image_path(self):
+        return self.image_path

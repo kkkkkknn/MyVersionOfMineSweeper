@@ -1,19 +1,17 @@
 import pygame
-import constants
 
 
-class HealthBar(pygame.sprite.Sprite):
-    def __init__(self, player):
-        super().__init__()
-        self.player = player
-        self.image = pygame.Surface((100, 20))
-        self.image.fill((255, 0, 0))
-        self.rect = self.image.get_rect()
-        self.rect.bottomright = (constants.SCREEN_WIDTH - 10, constants.SCREEN_HEIGHT - 10)
+class HealthBar:
+    def __init__(self):
+        self.full_health = 100
+        self.health = self.full_health
+        self.width = 200
+        self.height = 20
 
-    def update(self):
-        health_percentage = self.player.health / self.player.max_health
-        health_width = int(health_percentage * self.image.get_width())
+    def update(self, damage):
+        self.health -= damage
 
-        self.image.fill((255, 0, 0))
-        pygame.draw.rect(self.image, (0, 255, 0), (0, 0, health_width, self.image.get_height()))
+    def draw(self, screen):
+        pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(10, 10, self.width, self.height))
+        health_width = int(self.health / self.full_health * self.width)
+        pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(10, 10, health_width, self.height))

@@ -2,18 +2,24 @@ import pygame
 import constants
 
 
-class GameMap(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.image = pygame.Surface((constants.GAME_WIDTH, constants.GAME_HEIGHT))
-        self.image.fill(constants.BACKGROUND_COLOR)
+class GameMap:
+    def __init__(self, filename):
+        self.map = self.load_map(filename)
 
-        grass_image = pygame.image.load('data/grass.png').convert_alpha()
-        grass_image = pygame.transform.scale(grass_image, (constants.CELL_SIZE, constants.CELL_SIZE))
+    def load_map(self, filename):
+        map = []
+        with open(filename) as file:
+            for line in file:
+                row = []
+                for char in line.strip():
+                    row.append(char)
+                map.append(row)
+        return map
 
-        for x in range(0, constants.GAME_WIDTH, constants.CELL_SIZE):
-            for y in range(0, constants.GAME_HEIGHT, constants.CELL_SIZE):
-                self.image.blit(grass_image, (x, y))
-
-        self.rect = self.image.get_rect()
-        self.rect.center = (constants.SCREEN_WIDTH // 2, constants.SCREEN_HEIGHT // 2)
+    def draw(self, screen):
+        tile_size = constants.CELL_SIZE
+        for y, row in enumerate(self.map):
+            for x, char in enumerate(row):
+                if char == "G":
+                    grass_image = pygame.image.load(constants.GRASS_IMAGE)
+                    screen.blit(grass_image, (x * tile_size, y * tile_size))
